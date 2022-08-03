@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakoad_songre/colors.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kakoad_songre/screens/soil_page_info.dart';
 
 class GoogleMapScreen extends StatefulWidget {
   const GoogleMapScreen({Key? key}) : super(key: key);
@@ -10,11 +11,11 @@ class GoogleMapScreen extends StatefulWidget {
 }
 
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = {};
   void _onMapCreator(GoogleMapController controller){
     setState(() {
       _markers.add(
-        Marker(
+        const Marker(
         markerId: MarkerId('id-01'),
         position: LatLng(11.905720, -1.293255),)
       );
@@ -33,6 +34,15 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               CameraPosition(target: LatLng(11.905720, -1.293255), zoom: 11),
           onMapCreated: _onMapCreator,
           markers: _markers,
-        ));
+        ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: (){
+         bottomSheet(context);
+      },
+      backgroundColor: GREEN,
+      child:const Icon(Icons.place_outlined),
+    ),);
   }
+
+
 }
