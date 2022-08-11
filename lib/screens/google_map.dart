@@ -15,9 +15,14 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   void _onMapCreator(GoogleMapController controller){
     setState(() {
       _markers.add(
-        const Marker(
-        markerId: MarkerId('id-01'),
-        position: LatLng(11.905720, -1.293255),)
+         Marker(
+         onTap: () {
+          bottomSheet(context);
+         },
+          markerId: MarkerId('id-02'),
+          position: LatLng(11.905720, -1.293255),
+
+        )
       );
     });
   }
@@ -29,7 +34,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           title: const Text('Google Map'),
           centerTitle: true,
         ),
-        body: GoogleMap(
+        body: GoogleMap(zoomControlsEnabled: false,
           initialCameraPosition:
               CameraPosition(target: LatLng(11.905720, -1.293255), zoom: 11),
           onMapCreated: _onMapCreator,
