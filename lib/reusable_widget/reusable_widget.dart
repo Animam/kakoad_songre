@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../colors.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 TextField reuseable_widget(String text, IconData icon, bool isPasswordType,
     TextEditingController controller) {
@@ -30,7 +31,21 @@ TextField reuseable_widget(String text, IconData icon, bool isPasswordType,
         : TextInputType.emailAddress,
   );
 }
+IntlPhoneField phoneField(){
+  return IntlPhoneField(
+    onChanged: (value){
 
+    },
+    decoration: InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))
+    ),
+  );
+}
+ // IntlPhoneField phoneField(TextEditingController controller){
+ //  return IntlPhoneField(
+ //
+ //  )
+ // }
 Container signInSignUpButton(
     BuildContext context, bool isLogin, Function onTap) {
   return Container(

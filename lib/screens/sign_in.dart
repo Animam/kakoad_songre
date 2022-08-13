@@ -38,6 +38,7 @@ class _SignInPageState extends State<SignInPage> {
               reuseable_widget(
                   'Mot de passe', Icons.lock, true, passwordControler),
               const SizedBox(height: 30,),
+              phoneField(),
               signInSignUpButton(context, true, () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomePage()));

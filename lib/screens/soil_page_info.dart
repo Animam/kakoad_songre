@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kakoad_songre/colors.dart';
-import 'package:kakoad_songre/screens/guide_sheet_page.dart';
-import 'package:kakoad_songre/screens/home_page.dart';
+import 'package:kakoad_songre/screens/adapted_crops.dart';
 
 void bottomSheet(context) {
   showModalBottomSheet(
@@ -48,20 +47,9 @@ void bottomSheet(context) {
                   ],
                 ),
                 SizedBox(height: 20),
-                // TextButton(
-                //
-                //   onPressed: () {},
-                //   child: Align(
-                //     alignment: Alignment.bottomRight,
-                //     child: Text(
-                //       'culture adaptée',
-                //       style: TextStyle(fontSize: 20, color: GREEN),
-                //     ),
-                //   ),
-                // ),
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>GuideSheetPage() ));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AdaptedCropsPage() ));
                   },
                   child: Align(
                       alignment: Alignment.centerRight,

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "368609692353",
+    "project_id": "song-kakoada",
+    "storage_bucket": "song-kakoada.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368609692353:android:6e042bc82a36cda3f4e240",
+        "android_client_info": {
+          "package_name": "com.example.kakoad_songre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368609692353-4o3fvksrd7r39i3pgm1snhk6d092c474.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kakoad_songre",
+            "certificate_hash": "0e3acca82df2da245df7cca92773f8e821a0129d"
+          }
+        },
+        {
+          "client_id": "368609692353-p2eecv9t0s67865ckl1ihs5eeiln7k5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRC7H8OvW2MyaQVKukJp0lP_0RNnXBY4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368609692353-p2eecv9t0s67865ckl1ihs5eeiln7k5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
