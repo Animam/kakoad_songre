@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:kakoad_songre/screens/soil_page_info.dart';
+import 'package:kakoad_songre/screens/adapted_crops.dart';
 import 'package:kakoad_songre/colors.dart';
+//
 
 class GoogleMapScreen extends StatefulWidget {
   const GoogleMapScreen({Key? key}) : super(key: key);
@@ -12,26 +14,149 @@ class GoogleMapScreen extends StatefulWidget {
 }
 
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
+  // void displayMarkers() {
+  //   setState(() {
+  //     _markers.clear();
+  //     _markers.add(Marker(
+  //       onTap: () {
+  //         bottomSheet(context);
+  //       },
+  //       markerId: MarkerId('1'),
+  //       position: LatLng(12.46593663, -3.104782332),
+  //     ));
+  //   });
+  // }
+
   late GoogleMapController googleMapController;
   static CameraPosition initialCameraPosition =
-      const CameraPosition(target: LatLng(12.416600, -3.419553), zoom: 11);
-  final Set<Marker> _markers = {};
+      const CameraPosition(target: LatLng(12.416600, -3.419553), zoom: 10
+
+
+      );
+  // final Set<Marker> _markers = {};
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+
+  void initMarker(specify, specifyId) async {
+    print(specify);
+    //developer.log('Anicet', name: specify['latitude']);
+    var markerIdVal = specifyId;
+    final MarkerId markerId = MarkerId(markerIdVal);
+    final Marker marker = Marker(
+        markerId: markerId,
+        position:
+            LatLng(double.parse(specify['latitude']), double.parse(specify['longitude'])),
+            //LatLng(specify['latitude'].latitude, specify['longitude'].longitude),
+
+        onTap: () {
+          showModalBottomSheet(
+              backgroundColor: Colors.transparent,
+              context: context,
+              builder: (context) {
+                return SingleChildScrollView(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(25),
+                        topLeft: Radius.circular(25),
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            specify['type_de_sol'],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          Text(
+                            "Le niveau de fertilité du sol est ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          Text(
+                            specify['niveau_de_fertilité'],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 25),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AdaptedCropsPage(data: specify)));
+                            },
+                            child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text('Voir cultures',
+                                    style:
+                                        TextStyle(fontSize: 20, color: GREEN))),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        });
+    setState(() {
+      markers[markerId] = marker;
+    });
+  }
+
+  getDataMarker() async {
+    FirebaseFirestore.instance
+        .collection('soils-data')
+        .get()
+        .then((mysoildata) {
+      if (mysoildata.docs.isNotEmpty) {
+        for (int i = 0; i < mysoildata.docs.length; i++) {
+          initMarker(mysoildata.docs[i].data(), mysoildata.docs[i].id);
+        }
+      }
+    });
+  }
+
+  void initState() {
+    getDataMarker();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Set<Marker> getMarker() {
+      return <Marker>[
+        Marker(
+            markerId: MarkerId('Soil info'),
+            position: LatLng(12.46593663, -3.104782332))
+      ].toSet();
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: GREEN,
-        title: const Text('Google Map'),
+        title: const Text('Sols Disponible'),
         centerTitle: true,
       ),
       body: GoogleMap(
+        markers: Set<Marker>.of(markers.values),
+        // markers: getMarker(),
+        // mapType: MapType.hybrid,
         zoomControlsEnabled: false,
         initialCameraPosition: initialCameraPosition,
         onMapCreated: (GoogleMapController controler) {
           googleMapController = controler;
+          // displayMarkers();
         },
-        markers: _markers,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -39,17 +164,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           googleMapController.animateCamera(CameraUpdate.newCameraPosition(
               CameraPosition(
                   target: LatLng(position.latitude, position.longitude),
-                  zoom: 14)));
-
-          _markers.clear();
-          _markers.add(Marker(
-            onTap: () {
-              bottomSheet(context);
-            },
-            markerId: const MarkerId(''),
-            position: LatLng(position.latitude, position.longitude),
-          ));
-          setState(() {});
+                  zoom: 12)));
         },
         backgroundColor: GREEN,
         child: const Icon(Icons.place_outlined),

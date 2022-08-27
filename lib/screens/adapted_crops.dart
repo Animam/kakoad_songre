@@ -1,9 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kakoad_songre/colors.dart';
+import 'list_no_adapted_crops.dart';
+import 'list_of_adapted_crop.dart';
 
 class AdaptedCropsPage extends StatefulWidget {
-  const AdaptedCropsPage({Key? key}) : super(key: key);
+  late Map data;
+   AdaptedCropsPage({Key? key, required this.data});
 
   @override
   State<AdaptedCropsPage> createState() => _AdaptedCropsPageState();
@@ -14,41 +16,84 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text('Culture Adaptées'),
+        title: const Text('Choix cultures'),
         centerTitle: true,
         backgroundColor: GREEN,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Container(
-          // color: Colors.grey,
-          child: ListView(
-            children: [
-              Container(
-                height: 100,
-                width: 300,
-                color: Colors.red,
-              ),
-              SizedBox(height: 25,),
-              Container(
-                height: 300,
-                width: 400,
-                // color: Colors.green,
+      body: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 6,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25)),
+                  color: GREEN,
+                  image: DecorationImage(
+                      image: AssetImage('images/guerre-des-semences.jpg'),
+                      fit: BoxFit.cover)),
+            ),
+          ),
+          SizedBox(
+            height: 24,
+          ),
+          Expanded(
+            flex: 6,
+            child: Container(
+              child: Center(
                 child: Column(
-                  children:const [
-                    Text('Sol FLIPP'),
-                    Text('-	Marginalement apte pour les cultures pluviales de mil, sorgho, maïs, arachide, niébé, sésame et la sylviculture \n '
-                        '-	Inapte en permanence pour le riz pluvial et irrigué, le cotonnier l’arboriculture fruitière (bananier, manguier, agrumes et goyavier)'
-                        ' et toute autre culture irriguée ou maraîchère',style: TextStyle(fontSize: 20),)
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          minimumSize: Size(250, 30),
+                          backgroundColor: GREEN,
+                          primary: Colors.white),
+                      child: const Text(
+                        'Culture Adaptées',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ListAdaptedCrops(data: widget.data)
+
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 25),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          minimumSize: Size(250, 30),
+                          backgroundColor: GREEN,
+                          primary: Colors.white),
+                      child: const Text(
+                        'Cultures Inapte',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ListNoAdaptedCrops()),
+                        );
+                      },
+                    )
                   ],
                 ),
               ),
-
-            ],
-          ),
-        ),
+            ),
+          )
+        ],
       ),
-
     );
   }
 }

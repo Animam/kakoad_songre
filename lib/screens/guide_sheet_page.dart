@@ -13,11 +13,11 @@ class _GuideSheetPageState extends State<GuideSheetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('logo'),
+        title: Text('Liste des fiches de Guide'),
         backgroundColor: GREEN,
       ),
       body: Center(
-        child: Image(image: AssetImage('images/logo.png')),
+
       ),
     );
   }

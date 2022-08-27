@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:kakoad_songre/screens/guide_sheet_page.dart';
 import 'package:kakoad_songre/screens/sign_in.dart';
+import 'package:kakoad_songre/screens/soil_page_info.dart';
 import '../colors.dart';
 import 'google_map.dart';
-import'package:intl_phone_field/intl_phone_field.dart';
+// import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -35,8 +36,8 @@ class _HomePageState extends State<HomePage> {
                         color: GREEN,
                       ),
                       title: const Text(
-                        'Home',
-                        style: TextStyle(fontSize: 18),
+                        'Acceuil',
+                        style: TextStyle(fontSize: 20),
                       ),
                       onTap: () {
                         Navigator.push(
@@ -45,28 +46,47 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => HomePage()));
                       },
                     ),
+
+                    ListTile(
+                      leading: const Icon(
+                        Icons.settings,
+                        color: GREEN,
+                      ),
+                      title: const Text(
+                        'Paramètre',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onTap: () {},
+                    ),
                     ListTile(
                       leading: const Icon(
                         Icons.info,
                         color: GREEN,
                       ),
                       title: const Text(
-                        'About us',
-                        style: TextStyle(fontSize: 18),
+                        'Apropos',
+                        style: TextStyle(fontSize: 20),
                       ),
                       onTap: () {
                         //Direct to about  us page
                       },
-                    )
+                    ),
                   ],
                 ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignInPage()));
+                  onPressed: () async {
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignInPage()));
+                    } on FirebaseAuthException catch (e) {
+                      print(e.message);
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -91,40 +111,84 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Acceuil'),
         centerTitle: true,
         backgroundColor: GREEN,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: GREEN, primary: Colors.white),
-              child: Text(
-                'Voir les sols',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GoogleMapScreen()),
-                );
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignInPage()));
               },
-            ),
-            SizedBox(height: 25),
-            TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: GREEN, primary: Colors.white),
-              child: Text(
-                'Voir fiche technique',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              icon: Icon(Icons.logout))
+        ],
+      ),
+      body: Column(
+        children: [
+          // Image(image: AssetImage('images/kl.jpeg')),
+          Expanded(
+            flex: 6,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(25),
+                    bottomLeft: Radius.circular(25)),
+                image: DecorationImage(
+                  image: AssetImage('images/home_background.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
-              onPressed: () {},
-            )
-          ],
-        ),
+            ),
+          ),
+          // SizedBox(height: 60,),
+          Expanded(
+            flex: 8,
+            child: Container(
+              // height: 400,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: GREEN,
+                          primary: Colors.white,
+                          minimumSize: Size(250, 10)),
+                      child: Text(
+                        'Voir les sols',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => GoogleMapScreen()),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 25),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: GREEN,
+                          primary: Colors.white,
+                          minimumSize: Size(250, 10)),
+                      child: Text(
+                        'Voir fiches de Guide',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>GuideSheetPage()));
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

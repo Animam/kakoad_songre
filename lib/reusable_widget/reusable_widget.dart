@@ -18,8 +18,8 @@ TextField reuseable_widget(String text, IconData icon, bool isPasswordType,
       ),
       labelText: text,
       labelStyle: const TextStyle(
-        // color: Colors.white.withOpacity(0.9),
-      ),
+          // color: Colors.white.withOpacity(0.9),
+          ),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
@@ -31,23 +31,23 @@ TextField reuseable_widget(String text, IconData icon, bool isPasswordType,
         : TextInputType.emailAddress,
   );
 }
-IntlPhoneField phoneField(){
-  return IntlPhoneField(
-    onChanged: (value){
 
+IntlPhoneField phoneField() {
+  return IntlPhoneField(
+    initialCountryCode: 'BF',
+    onChanged: (phoneNumber) {
     },
     decoration: InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))
-    ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
   );
 }
- // IntlPhoneField phoneField(TextEditingController controller){
- //  return IntlPhoneField(
- //
- //  )
- // }
-Container signInSignUpButton(
-    BuildContext context, bool isLogin, Function onTap) {
+
+// IntlPhoneField phoneField(TextEditingController controller){
+//  return IntlPhoneField(
+//
+//  )
+// }
+Container signInSignUpButton(BuildContext context, Function onPressed) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 50,
@@ -57,25 +57,21 @@ Container signInSignUpButton(
     ),
     child: ElevatedButton(
       onPressed: () {
-        onTap();
+        onPressed;
       },
-      child: Text(
-        isLogin ? 'Log In' : 'Sign Up',
-        style: const TextStyle(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(GREEN),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+      ),
+      child: const Text(
+        'Log In',
+        style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
       ),
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.pressed)) {
-              return Colors.black26;
-            }
-            return GREEN;
-          }),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
     ),
   );
 }
