@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kakoad_songre/colors.dart';
-import 'package:kakoad_songre/screens/suggestion.dart';
+
 class ListNoAdaptedCrops extends StatefulWidget {
-  const ListNoAdaptedCrops({Key? key}) : super(key: key);
+  late Map data;
+  ListNoAdaptedCrops({Key? key, required this.data});
 
   @override
   State<ListNoAdaptedCrops> createState() => _ListNoAdaptedCropsState();
@@ -11,6 +12,8 @@ class ListNoAdaptedCrops extends StatefulWidget {
 class _ListNoAdaptedCropsState extends State<ListNoAdaptedCrops> {
   @override
   Widget build(BuildContext context) {
+    List _noAdaptedCrops = widget.data["culture_inapte"].toString().split(",");
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Culture Non Adaptées'),
@@ -20,41 +23,21 @@ class _ListNoAdaptedCropsState extends State<ListNoAdaptedCrops> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text(
-              'Liste des cultures non adaptées',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 25),
-            Card(
-              child: ListTile(
-
-                // leading: Image.asset('images/Culture-maraichere-bio.jpg'),
-                title: Text('Inapte en permanence',
-                    style: TextStyle(
-                      fontSize: 20,
-                    )),
-                subtitle: Text(
-                  'Cultures maraîchères',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-            ),
-            SizedBox(height: 25),
-            Card(
-              child: ListTile(
-
-                // leading: Image.asset('images/Planter-des-arachides.jpg'),
-                title: Text('Inapte en permanence',
-                    style: TextStyle(
-                      fontSize: 20,
-                    )),
-                subtitle: Text(
-                  'culture irriguées',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-            ),
-
+            ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: _noAdaptedCrops.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: EdgeInsets.all(10),
+                  elevation: 5,
+                  child: Text(
+                    _noAdaptedCrops[index],
+                    style: TextStyle(fontSize: 20),
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),

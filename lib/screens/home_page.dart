@@ -1,10 +1,15 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:kakoad_songre/screens/guide_file.dart';
 import 'package:kakoad_songre/screens/guide_sheet_page.dart';
 import 'package:kakoad_songre/screens/sign_in.dart';
-import 'package:kakoad_songre/screens/soil_page_info.dart';
+import 'package:kakoad_songre/screens/suggestion.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import '../colors.dart';
 import 'google_map.dart';
-// import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -179,8 +184,16 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>GuideSheetPage()));
+                      onPressed: () async {
+                        await Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Suggestion()));
+
+                        // final url = 'Fiche Kapelga.pdf';
+                        // final file = await PdfAPI.loadFirebase(url);
+                        //
+                        // if (file == null) return;
+                        // openPDF(context, file);
+                        //
                       },
                     )
                   ],
@@ -230,5 +243,80 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  // void openPDF(BuildContext context, File file) => Navigator.of(context).push(
+  //   MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
+  // );
+}
+
+class PdfList extends StatefulWidget {
+  PdfList({Key? key}) : super(key: key);
+
+  @override
+  State<PdfList> createState() => _PdfListState();
+}
+
+class _PdfListState extends State<PdfList> {
+  late Future<ListResult> futureFiles;
+
+  @override
+  Widget build(BuildContext context) {
+    futureFiles = FirebaseStorage.instance.ref('/files').listAll();
+    return FutureBuilder<ListResult>(
+      future: futureFiles,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final files = snapshot.data!.items;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("Liste PDF"),
+            ),
+            body: ListView.builder(
+                itemCount: files.length,
+                itemBuilder: (context, index) {
+                  final file = files[index];
+                  return ListTile(
+                    title: Text(file.name),
+                    trailing: IconButton(
+                      icon: Icon(Icons.download),
+                      onPressed: () async {
+                       // await dowloadFile(file);
+                        final url = file.name;
+                        final filed = await PdfAPI.loadFirebase(url);
+                        //
+                        if (filed == null) return;
+                        openPDF(context, filed);
+                      },
+                    ),
+                  );
+                }),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text("Error Ocurred"),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  void openPDF(BuildContext context, File file) => Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
+      );
+
+  Future dowloadFile(Reference ref) async{
+    final url = await ref.getDownloadURL();
+
+
+    final dir = await getApplicationDocumentsDirectory();
+    final filed =File('${dir.path}/${ref.name}');
+
+    await ref.writeToFile(filed);
+    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Downloaded ${ref.name}')));
   }
 }

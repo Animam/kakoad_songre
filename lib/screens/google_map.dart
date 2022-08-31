@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kakoad_songre/screens/adapted_crops.dart';
 import 'package:kakoad_songre/colors.dart';
-//
 
 class GoogleMapScreen extends StatefulWidget {
   const GoogleMapScreen({Key? key}) : super(key: key);
@@ -14,39 +13,19 @@ class GoogleMapScreen extends StatefulWidget {
 }
 
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
-  // void displayMarkers() {
-  //   setState(() {
-  //     _markers.clear();
-  //     _markers.add(Marker(
-  //       onTap: () {
-  //         bottomSheet(context);
-  //       },
-  //       markerId: MarkerId('1'),
-  //       position: LatLng(12.46593663, -3.104782332),
-  //     ));
-  //   });
-  // }
-
   late GoogleMapController googleMapController;
   static CameraPosition initialCameraPosition =
-      const CameraPosition(target: LatLng(12.416600, -3.419553), zoom: 10
+      const CameraPosition(target: LatLng(12.416600, -3.419553), zoom: 10);
 
-
-      );
-  // final Set<Marker> _markers = {};
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   void initMarker(specify, specifyId) async {
-    print(specify);
-    //developer.log('Anicet', name: specify['latitude']);
     var markerIdVal = specifyId;
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
         markerId: markerId,
-        position:
-            LatLng(double.parse(specify['latitude']), double.parse(specify['longitude'])),
-            //LatLng(specify['latitude'].latitude, specify['longitude'].longitude),
-
+        position: LatLng(double.parse(specify['latitude']),
+            double.parse(specify['longitude'])),
         onTap: () {
           showModalBottomSheet(
               backgroundColor: Colors.transparent,
@@ -63,18 +42,17 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                     ),
                     child: Center(
                       child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            specify['type_de_sol'],
+                            "Type du sol : \n" + specify['type_de_sol'],
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 25,
                             ),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: 40),
                           Text(
-                            "Le niveau de fertilité du sol est ",
+                            "Le niveau de fertilité du sol est :",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 25,
@@ -99,7 +77,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                                 alignment: Alignment.centerRight,
                                 child: Text('Voir cultures',
                                     style:
-                                        TextStyle(fontSize: 20, color: GREEN))),
+                                        TextStyle(fontSize: 22, color: GREEN))),
                           )
                         ],
                       ),
@@ -133,14 +111,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Set<Marker> getMarker() {
-      return <Marker>[
-        Marker(
-            markerId: MarkerId('Soil info'),
-            position: LatLng(12.46593663, -3.104782332))
-      ].toSet();
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: GREEN,
@@ -149,13 +119,11 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       ),
       body: GoogleMap(
         markers: Set<Marker>.of(markers.values),
-        // markers: getMarker(),
         // mapType: MapType.hybrid,
         zoomControlsEnabled: false,
         initialCameraPosition: initialCameraPosition,
         onMapCreated: (GoogleMapController controler) {
           googleMapController = controler;
-          // displayMarkers();
         },
       ),
       floatingActionButton: FloatingActionButton(

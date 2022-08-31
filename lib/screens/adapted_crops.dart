@@ -5,7 +5,7 @@ import 'list_of_adapted_crop.dart';
 
 class AdaptedCropsPage extends StatefulWidget {
   late Map data;
-   AdaptedCropsPage({Key? key, required this.data});
+  AdaptedCropsPage({Key? key, required this.data});
 
   @override
   State<AdaptedCropsPage> createState() => _AdaptedCropsPageState();
@@ -16,12 +16,11 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choix cultures'),
+        title: const Text('Choix de cultures'),
         centerTitle: true,
         backgroundColor: GREEN,
       ),
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
             flex: 6,
@@ -48,11 +47,11 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
                   children: [
                     TextButton(
                       style: TextButton.styleFrom(
-                          minimumSize: Size(250, 30),
+                          minimumSize: Size(285, 30),
                           backgroundColor: GREEN,
                           primary: Colors.white),
                       child: const Text(
-                        'Culture Adaptées',
+                        'Cultures adaptées',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -62,9 +61,8 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ListAdaptedCrops(data: widget.data)
-
-                          ),
+                              builder: (context) =>
+                                  ListAdaptedCrops(data: widget.data)),
                         );
                       },
                     ),
@@ -75,7 +73,7 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
                           backgroundColor: GREEN,
                           primary: Colors.white),
                       child: const Text(
-                        'Cultures Inapte',
+                        'Cultures non-adaptées',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
@@ -83,7 +81,9 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ListNoAdaptedCrops()),
+                              builder: (context) => ListNoAdaptedCrops(
+                                    data: widget.data,
+                                  )),
                         );
                       },
                     )

@@ -19,8 +19,6 @@ class _SignInPageState extends State<SignInPage> {
   late String verId;
   late String phone;
   bool codeSent = false;
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _passControler = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
