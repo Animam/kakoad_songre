@@ -188,12 +188,6 @@ class _HomePageState extends State<HomePage> {
                         await Navigator.push(context,
                             MaterialPageRoute(builder: (context) => Suggestion()));
 
-                        // final url = 'Fiche Kapelga.pdf';
-                        // final file = await PdfAPI.loadFirebase(url);
-                        //
-                        // if (file == null) return;
-                        // openPDF(context, file);
-                        //
                       },
                     )
                   ],

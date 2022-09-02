@@ -1,16 +1,15 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:kakoad_songre/colors.dart';
 import 'package:path/path.dart';
 
 class PDFViewerPage extends StatefulWidget {
   final File file;
 
   const PDFViewerPage({
-
     required this.file,
-  }) ;
+  });
 
   @override
   _PDFViewerPageState createState() => _PDFViewerPageState();
@@ -29,24 +28,25 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
+        backgroundColor: GREEN,
         actions: pages >= 2
             ? [
-          Center(child: Text(text)),
-          IconButton(
-            icon: Icon(Icons.chevron_left, size: 32),
-            onPressed: () {
-              final page = indexPage == 0 ? pages : indexPage - 1;
-              controller.setPage(page);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.chevron_right, size: 32),
-            onPressed: () {
-              final page = indexPage == pages - 1 ? 0 : indexPage + 1;
-              controller.setPage(page);
-            },
-          ),
-        ]
+                Center(child: Text(text)),
+                IconButton(
+                  icon: Icon(Icons.chevron_left, size: 32),
+                  onPressed: () {
+                    final page = indexPage == 0 ? pages : indexPage - 1;
+                    controller.setPage(page);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.chevron_right, size: 32),
+                  onPressed: () {
+                    final page = indexPage == pages - 1 ? 0 : indexPage + 1;
+                    controller.setPage(page);
+                  },
+                ),
+              ]
             : null,
       ),
       body: PDFView(
@@ -56,8 +56,10 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
         // pageSnap: false,
         // pageFling: false,
         onRender: (pages) => setState(() => this.pages = pages!),
-        onViewCreated: (controller) =>
-            setState(() => this.controller = controller),
+        onViewCreated: (controller) => {
+          setState(() => this.controller = controller),
+        },
+
         onPageChanged: (indexPage, _) =>
             setState(() => this.indexPage = indexPage!),
       ),

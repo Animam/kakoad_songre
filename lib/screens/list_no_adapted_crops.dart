@@ -28,12 +28,16 @@ class _ListNoAdaptedCropsState extends State<ListNoAdaptedCrops> {
               shrinkWrap: true,
               itemCount: _noAdaptedCrops.length,
               itemBuilder: (context, index) {
+                var _ = _noAdaptedCrops[index].toString().split("|");
+
                 return Card(
                   margin: EdgeInsets.all(10),
                   elevation: 5,
-                  child: Text(
-                    _noAdaptedCrops[index],
-                    style: TextStyle(fontSize: 20),
+                  child: Column(
+                    children: [
+                      Text(_[0], style: TextStyle(fontSize: 20)),
+                      Text("a (aux)"+_[1], style: TextStyle(fontSize: 20)),
+                    ],
                   ),
                 );
               },

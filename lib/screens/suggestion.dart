@@ -1,17 +1,15 @@
-import 'dart:ffi';
-
-import 'package:dio/dio.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as Path;
+
 import 'package:kakoad_songre/colors.dart';
 import 'package:kakoad_songre/screens/guide_file.dart';
-import 'dart:io';
-
 import 'package:kakoad_songre/screens/guide_sheet_page.dart';
-import 'package:path/path.dart' as Path;
-import 'package:path_provider/path_provider.dart';
 
-//import 'package:path/path.dart' as Path
 class Suggestion extends StatefulWidget {
   const Suggestion({Key? key}) : super(key: key);
 
@@ -27,7 +25,7 @@ class _SuggestionState extends State<Suggestion> {
     futureFiles = FirebaseStorage.instance.ref('/files').listAll();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Suggestion'),
+        title: Text('Liste des fiches de guides'),
         centerTitle: true,
         backgroundColor: GREEN,
       ),
@@ -38,29 +36,40 @@ class _SuggestionState extends State<Suggestion> {
             final files = snapshot.data!.items;
             var fileb;
             print(files);
-            return ListView.builder(
-                itemCount: files.length,
-                itemBuilder: (context, index) {
-                  var file = files[index];
-                  return ListTile(
-                    title: Text(file.name),
-                    trailing: IconButton(
-                      icon: Icon(Icons.download),
-                      onPressed: () async{
-                        await dowloadFile(file);
-                        final url = Path.dirname(file.fullPath)+Path.separator+file.name;
-                        print("-----------------vbvbv--------"+url);
-                        fileb = await PdfAPI.loadFirebase(url);
-
-                        if (fileb == null) return;
-                        openPDF(context, fileb);
-                      },
-                    ),
-                  );
-                });
+            return SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: files.length,
+                  itemBuilder: (context, index) {
+                    var file = files[index];
+                    return Card(
+                      elevation: 9,
+                      child: ListTile(
+                        title: Text(
+                          file.name,
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.download),
+                          onPressed: () async {
+                            await dowloadFile(file);
+                            final url = Path.dirname(file.fullPath) +
+                                Path.separator +
+                                file.name;
+                            fileb = await PdfAPI.loadFirebase(url);
+                            if (fileb == null) return;
+                            openPDF(context, fileb);
+                          },
+                        ),
+                      ),
+                    );
+                  }),
+            );
           } else if (snapshot.hasError) {
             return Center(
-              child: errorHasOccurred == true? Text("Error Occurred"): null,
+              child: errorHasOccurred == true ? Text("Error Occurred") : null,
             );
           } else {
             return Center(
@@ -71,19 +80,19 @@ class _SuggestionState extends State<Suggestion> {
       ),
     );
   }
-  void openPDF(BuildContext context, File fileb) => Navigator.of(context).push(
-    MaterialPageRoute(builder: (context) => PDFViewerPage(file: fileb)),
-  );
 
-  Future dowloadFile(Reference ref) async{
+  void openPDF(BuildContext context, File fileb) => Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => PDFViewerPage(file: fileb)),
+      );
+
+  Future dowloadFile(Reference ref) async {
     final url = await ref.getDownloadURL();
 
     final dir = await getApplicationDocumentsDirectory();
     var path = '${dir.path}/${ref.name}';
-    // final file =File(path);
 
-    //await ref.writeToFile(file);
     await Dio().download(url, path);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Downloaded ${ref.name}')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Downloaded ${ref.name}')));
   }
- }
+}

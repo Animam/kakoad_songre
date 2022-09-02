@@ -106,6 +106,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
   void initState() {
     getDataMarker();
+
     super.initState();
   }
 
@@ -118,21 +119,21 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         centerTitle: true,
       ),
       body: GoogleMap(
-        markers: Set<Marker>.of(markers.values),
-        // mapType: MapType.hybrid,
-        zoomControlsEnabled: false,
-        initialCameraPosition: initialCameraPosition,
-        onMapCreated: (GoogleMapController controler) {
-          googleMapController = controler;
-        },
-      ),
+          markers: Set<Marker>.of(markers.values),
+          // mapType: MapType.hybrid,
+
+          zoomControlsEnabled: false,
+          initialCameraPosition: initialCameraPosition,
+          onMapCreated: (GoogleMapController controler) {
+            googleMapController = controler;
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Position position = await _determinePostion();
           googleMapController.animateCamera(CameraUpdate.newCameraPosition(
               CameraPosition(
                   target: LatLng(position.latitude, position.longitude),
-                  zoom: 12)));
+                  zoom: 15)));
         },
         backgroundColor: GREEN,
         child: const Icon(Icons.place_outlined),
