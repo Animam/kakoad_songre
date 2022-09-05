@@ -4,6 +4,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kakoad_songre/screens/adapted_crops.dart';
 import 'package:kakoad_songre/colors.dart';
+import 'package:kakoad_songre/screens/firebase_api.dart';
+
+List ListOfImages = [];
 
 class GoogleMapScreen extends StatefulWidget {
   const GoogleMapScreen({Key? key}) : super(key: key);
@@ -67,11 +70,11 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                           SizedBox(height: 25),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          AdaptedCropsPage(data: specify)));
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                specify["images"] = ListOfImages;
+                                return AdaptedCropsPage(data: specify);
+                              }));
                             },
                             child: Align(
                                 alignment: Alignment.centerRight,
@@ -92,6 +95,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   }
 
   getDataMarker() async {
+    //gets images for all markers
+    ListOfImages = await FirebaseApi.listAll('culture_image/');
+
     FirebaseFirestore.instance
         .collection('soils-data')
         .get()
@@ -118,15 +124,19 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         title: const Text('Sols Disponible'),
         centerTitle: true,
       ),
-      body: GoogleMap(
-          markers: Set<Marker>.of(markers.values),
-          // mapType: MapType.hybrid,
+      body: ListOfImages.isEmpty
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : GoogleMap(
+              markers: Set<Marker>.of(markers.values),
+              // mapType: MapType.hybrid,
 
-          zoomControlsEnabled: false,
-          initialCameraPosition: initialCameraPosition,
-          onMapCreated: (GoogleMapController controler) {
-            googleMapController = controler;
-          }),
+              zoomControlsEnabled: false,
+              initialCameraPosition: initialCameraPosition,
+              onMapCreated: (GoogleMapController controler) {
+                googleMapController = controler;
+              }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Position position = await _determinePostion();

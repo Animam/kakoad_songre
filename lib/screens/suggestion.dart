@@ -58,7 +58,7 @@ class _SuggestionState extends State<Suggestion> {
                             final url = Path.dirname(file.fullPath) +
                                 Path.separator +
                                 file.name;
-                            fileb = await PdfAPI.loadFirebase(url);
+                             fileb = await PdfAPI.loadFirebase(url);
                             if (fileb == null) return;
                             openPDF(context, fileb);
                           },

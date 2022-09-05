@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:kakoad_songre/colors.dart';
+import 'package:path_provider/path_provider.dart';
 import 'list_no_adapted_crops.dart';
 import 'list_of_adapted_crop.dart';
 
@@ -58,6 +61,7 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
                         ),
                       ),
                       onPressed: () {
+                        // dowloadFile(image);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -95,5 +99,15 @@ class _AdaptedCropsPageState extends State<AdaptedCropsPage> {
         ],
       ),
     );
+  }
+  Future dowloadFile(Reference ref) async {
+    final url = await ref.getDownloadURL();
+
+    final dir = await getApplicationDocumentsDirectory();
+    var path = '${dir.path}/${ref.name}';
+
+    await Dio().download(url, path);
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Downloaded ${ref.name}')));
   }
 }
